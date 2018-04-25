@@ -44,6 +44,11 @@ parameters:
           key: /calico/v1/ipam/v4/pool/${_param:calico_private_network}-${_param:calico_private_netmask}
           value: '{"masquerade":true,"cidr":"${_param:calico_private_network}/${_param:calico_private_netmask}"}'
   kubernetes:
+    common:
+      addons:
+        calico_policy:
+          enabled: ${_param:kubernetes_calico_policy_enabled}
+          image: ${_param:kubernetes_calico_policy_image}
     master:
       apiserver:
         secure_port: ${_param:kubernetes_apiserver_port}
@@ -51,9 +56,8 @@ parameters:
         ssl:
           enabled: true
       network:
-        cnis:
-        - calico
         calico:
+          enabled: true
           etcd:
             ssl:
               enabled: true
